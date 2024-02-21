@@ -1,5 +1,10 @@
 <script setup>
+import {supabase } from '@/supabase';
+import { useUserStore } from '@/stores/user';
+supabase.auth.onAuthStateChange((event,session) => {
+  useUserStore().fetchUserProfile(session?.user?.id)
 
+})
 </script>
 
 <template>
