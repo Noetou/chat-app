@@ -1,24 +1,28 @@
 <script setup>
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import ChatMessage from '@/components/ChatMessage.vue'
 import AppNavbar from '@/components/AppNavbar.vue';
+import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia';
+import {insertMessage, fetchMessages } from '@/api/messages'
+
+
+
+const { user } = storeToRefs(useUserStore())
 const messageTexte = ref('')
 const messageList = ref([])
 
+onMounted(async () => {
+    messageList.value = await fetchMessages()
+})
 const textarea = ref(null)
-const addMessage = ()=>{
-    messageList.value.push({
-        id: Math.random().toString(32).slice(2),
-        text:messageTexte.value,
-        date: new Date(),
-        user: {
-            username:"Orianne",
-            avatarUrl: "https://media.licdn.com/dms/image/D4E03AQFNQ8uGxF0TiQ/profile-displayphoto-shrink_800_800/0/1698869752227?e=2147483647&v=beta&t=kEyjn5VTsJyz56_7y4RAJWC-PkdLYTqFU91oaZVNsiI",
-        }
-    })
+
+
+const addMessage =  async () => {
+    await insertMessage(messageTexte.value,user.value.id)
+
     messageTexte.value = ''
     textarea.value.focus()
-
 }
 
 const deleteMessage = (id) =>{

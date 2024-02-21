@@ -15,18 +15,18 @@ const formatDate = (date) => {
     return `${formattedDay} à ${formattedTime}`
 }   
 const formattedDate = computed(() => {
-    const date = props.message.date 
+    const date = new Date(props.message.created_at)
     return formatDate(date)
 })
 </script>
 <template>
     <div class="flex">
-        <img class="h-7 w-7 rounded-full mr-5" :src="message.user.avatarUrl" alt="avatar">
-        {{ message.user.username }}
+        <img class="h-7 w-7 rounded-full mr-5" :src="message.author.avatar_url" alt="avatar">
+        {{ message.author.username }}
         <span class="text-xs text-opacity-80 text-gray-300 ml-5 mt-1">
             {{ formattedDate }}
         </span>
         <button class="p-2 ml-2 rounded-full hover:bg-slate-500 " @click="emit('delete',message.id)"> <TrashIcon class="w-3 h-3"/> </button>
     </div>
-    {{ message.text }}
+    {{ message.content }}
 </template>
